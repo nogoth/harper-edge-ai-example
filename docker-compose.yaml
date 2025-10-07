@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9926:9925"
+    environment:
+      - NODE_ENV=production
+      - HARPER_HOST=harperdb
+      - HARPER_PORT=9925
+    depends_on:
+      - harperdb
+
+  harperdb:
+    image: harperdb/harperdb:latest
+    environment:
+      - HDB_ADMIN_USERNAME=HDB_ADMIN
+      - HDB_ADMIN_PASSWORD=password123  # Change this in production
+      - MAX_MEMORY=2048
+      - SIMPLE_ADMIN_UI=yes
+    ports:
+      - "9925:9925"  
+    volumes:
+      - harperdb_data:/opt/harperdb/hdb
+
+volumes:
+  harperdb_data:
