@@ -1,5 +1,23 @@
 #!/bin/bash
 
+set -e          #if we get an error, bail out
+set -o pipefail #bail out if any part of a pipe fails
+
+# Function to format JSON (some of us do not have jq installed but most have some form of python)
+format_json() {
+    if command -v jq >/dev/null 2>&1; then
+        jq .
+    elif command -v python3 >/dev/null 2>&1; then
+        python3 -m json.tool
+    elif command -v python >/dev/null 2>&1; then
+        python -m json.tool
+    else
+        # If neither is available, `cat` the file, it's ugly but at least it'll be visible
+        cat
+        echo "❌ Warning: Neither jq nor python available for JSON formatting" >&2
+    fi
+}
+
 echo "🧠 Harper Edge AI Example - Demo"
 echo "=================================="
 echo
@@ -22,7 +40,7 @@ echo
 # Health Check
 echo -e "${BLUE}1. Health Check:${NC}"
 echo "-------------------"
-curl -s http://localhost:9926/Status | jq
+curl -s http://localhost:9926/Status | format_json
 echo
 
 # Personalize Products - Trail Running
@@ -56,7 +74,7 @@ curl -s -X POST http://localhost:9926/Personalize \
       "experienceLevel": "advanced",
       "season": "spring"
     }
-  }' | jq
+  }' | format_json
 echo
 
 # Personalize Products - Winter Camping
@@ -90,7 +108,7 @@ curl -s -X POST http://localhost:9926/Personalize \
       "experienceLevel": "beginner",
       "season": "winter"
     }
-  }' | jq
+  }' | format_json
 echo
 
 echo -e "${GREEN}✅ Demo completed!${NC}"
