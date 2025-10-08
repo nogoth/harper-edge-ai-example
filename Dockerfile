@@ -2,17 +2,14 @@ FROM node:18
 
 WORKDIR /app
 
-# Copy package files
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install
+RUN npm install -g harperdb #for that sweet sweet harper binary
 
-# Copy the rest of the application
 COPY . .
 
 # Expose the default Harper port
-EXPOSE 9925
+EXPOSE 9926
 
 # Start the application
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "dev"]
