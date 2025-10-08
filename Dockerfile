@@ -7,7 +7,7 @@ RUN npm install
 RUN npm install -g harperdb #for that sweet sweet harper binary
 
 ENV TC_AGREEMENT="yes"
-ENV ROOTPATH="/dev/shm/hdb"
+ENV ROOTPATH="/hdb"
 ENV HDB_ADMIN_USERNAME="HDB_ADMIN"
 ENV HDB_ADMIN_PASSWORD="password123"
 ENV MAX_MEMORY="2048"

@@ -5,25 +5,12 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "9926:9925"
+      - "9925:9925"
+      - "9926:9926"
     environment:
-      - NODE_ENV=production
-      - HARPER_HOST=harperdb
-      - HARPER_PORT=9925
-    depends_on:
-      - harperdb
+      - NODE_ENV=development
+      - LOGGING_LEVEL=info
+      - A_HARPER_HOST=harperdb
+      - A_HARPER_PORT=9925
 
-  harperdb:
-    image: harperdb/harperdb:latest
-    environment:
-      - HDB_ADMIN_USERNAME=HDB_ADMIN
-      - HDB_ADMIN_PASSWORD=password123  # Change this in production
-      - MAX_MEMORY=2048
-      - SIMPLE_ADMIN_UI=yes
-    ports:
-      - "9925:9925"  
-    volumes:
-      - harperdb_data:/opt/harperdb/hdb
-
-volumes:
-  harperdb_data:
+# TODO: figure out why the harper service is binding to ipv6 in docker
